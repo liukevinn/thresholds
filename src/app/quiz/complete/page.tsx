@@ -15,10 +15,10 @@ export default function QuizCompletePage() {
   const answeredCount = Object.keys(responses).length
 
   useEffect(() => {
-    if (answeredCount < 30) {
+    if (answeredCount < 30 && !submitting) {
       router.replace('/quiz/1')
     }
-  }, [answeredCount, router])
+  }, [answeredCount, router, submitting])
 
   async function handleSubmit() {
     setError(null)
@@ -62,7 +62,7 @@ export default function QuizCompletePage() {
     router.push('/profile')
   }
 
-  if (answeredCount < 30) return null
+  if (answeredCount < 30 && !submitting) return null
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] text-center px-4">
