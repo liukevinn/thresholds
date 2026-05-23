@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(unzip -p /Users/kevinliu/Desktop/thresholds/Threshold_System_Design.docx word/document.xml)"
+    ]
+  }
+}
