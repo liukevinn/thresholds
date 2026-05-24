@@ -13,15 +13,15 @@ interface Props {
 
 export default function ComparisonGrid({ profileA, profileB, comparison, nameA, nameB }: Props) {
   return (
-    <div className="space-y-10">
+    <div className="space-y-6">
       {THRESHOLD_GROUPS.map((group) => {
         const groupThresholds = THRESHOLDS.filter((t) => t.group === group)
         return (
-          <div key={group}>
-            <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider pb-2 border-b border-gray-100 mb-1">
-              {group}
-            </h2>
-            <div className="divide-y divide-gray-50">
+          <div key={group} className="rounded-xl bg-card border border-border overflow-hidden">
+            <div className="px-4 py-3 border-b border-border">
+              <p className="text-base font-bold text-foreground tracking-wide">{group}</p>
+            </div>
+            <div className="px-4 divide-y divide-border">
               {groupThresholds.map((t) => (
                 <ComparisonBar
                   key={t.key}

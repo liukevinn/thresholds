@@ -10,11 +10,11 @@ interface Props {
 
 export default function ThresholdGroup({ group, thresholds, profile }: Props) {
   return (
-    <div>
-      <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider pb-2 border-b border-gray-100 mb-1">
-        {group}
-      </h2>
-      <div className="divide-y divide-gray-50">
+    <div className="rounded-xl bg-card border border-border overflow-hidden">
+      <div className="px-4 py-3 border-b border-border">
+        <h2 className="text-base font-bold text-foreground tracking-wide">{group}</h2>
+      </div>
+      <div className="px-4 divide-y divide-border">
         {thresholds.map((t) => (
           <ThresholdBar key={t.key} meta={t} score={profile[t.key]} />
         ))}

@@ -14,15 +14,13 @@ const OPTIONS: ScenarioOption[] = ['A', 'B', 'C', 'D']
 export default function ScenarioCard({ scenario, selectedOption, onSelect }: ScenarioCardProps) {
   return (
     <div className="flex flex-col gap-6">
-      <div className="bg-gray-50 rounded-2xl p-6">
-        <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">
-          Scenario {scenario.number}
-        </p>
-        <p className="text-gray-800 leading-relaxed text-[15px]">{scenario.situation}</p>
+      <div className="bg-muted rounded-2xl p-6">
+        <p className="label-caps mb-3">scenario {scenario.number}</p>
+        <p className="text-base text-foreground leading-relaxed">{scenario.situation}</p>
       </div>
 
       <div>
-        <p className="text-base font-semibold text-gray-900 mb-4">{scenario.question}</p>
+        <p className="text-base font-bold text-foreground mb-4">{scenario.question}</p>
         <div className="flex flex-col gap-3">
           {OPTIONS.map((opt) => (
             <OptionButton

@@ -66,7 +66,7 @@ export default function InvitePage() {
       .single()
 
     if (insertError) {
-      setError('Failed to generate invite link. Please try again.')
+      setError('failed to generate invite link. please try again.')
       setGenerating(false)
       return
     }
@@ -85,32 +85,32 @@ export default function InvitePage() {
     try {
       await navigator.share({ title: 'Threshold', url: link })
     } catch {
-      // User dismissed the share sheet — no action needed
+      // user dismissed share sheet
     }
   }
 
   if (loading) return (
     <main className="max-w-2xl mx-auto px-4 py-12 animate-pulse">
-      <div className="h-3 w-20 bg-gray-100 rounded mb-3" />
-      <div className="h-7 w-44 bg-gray-200 rounded mb-2" />
-      <div className="h-4 w-80 bg-gray-100 rounded mb-8" />
-      <div className="h-10 w-48 bg-gray-100 rounded-lg" />
+      <div className="h-3 w-20 bg-muted rounded mb-3" />
+      <div className="h-8 w-44 bg-muted rounded mb-2" />
+      <div className="h-4 w-80 bg-muted rounded mb-8" />
+      <div className="h-10 w-48 bg-muted rounded-lg" />
     </main>
   )
 
   if (!quizCompleted) {
     return (
       <main className="max-w-2xl mx-auto px-4 py-12">
-        <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Threshold</p>
-        <h1 className="text-2xl font-semibold text-gray-900 mb-3">Invite a partner</h1>
-        <p className="text-sm text-gray-500 mb-6">
-          You need to complete the quiz before you can invite someone to compare profiles.
+        <p className="label-caps mb-2">Threshold</p>
+        <h1 className="heading text-3xl text-foreground mb-3">invite a partner</h1>
+        <p className="text-sm text-muted-foreground mb-6">
+          you need to complete the quiz before you can invite someone to compare profiles.
         </p>
         <Link
           href="/quiz"
-          className="inline-block px-5 py-2.5 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition-colors"
+          className="inline-block px-5 py-2.5 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
         >
-          Take the quiz
+          take the quiz
         </Link>
       </main>
     )
@@ -121,42 +121,42 @@ export default function InvitePage() {
 
   return (
     <main className="max-w-2xl mx-auto px-4 py-12">
-      <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Threshold</p>
-      <h1 className="text-2xl font-semibold text-gray-900 mb-1">Invite a partner</h1>
-      <p className="text-sm text-gray-500 mb-8">
-        Share this link with someone you&apos;d like to compare profiles with.
-        They&apos;ll need to complete the quiz before the comparison is available.
+      <p className="label-caps mb-2">Threshold</p>
+      <h1 className="heading text-3xl text-foreground mb-2">invite a partner</h1>
+      <p className="text-sm text-muted-foreground mb-8">
+        share this link with someone you&apos;d like to compare profiles with.
+        they&apos;ll need to complete the quiz before the comparison is available.
       </p>
 
       {!pairing ? (
         <div>
-          {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
+          {error && <p className="text-sm text-tension mb-4">{error}</p>}
           <button
             onClick={handleGenerate}
             disabled={generating}
-            className="px-5 py-2.5 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50"
+            className="px-5 py-2.5 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50"
           >
-            {generating ? 'Generating...' : 'Generate invite link'}
+            {generating ? 'generating...' : 'generate invite link'}
           </button>
         </div>
       ) : (
         <div className="space-y-6">
-          <div className="border border-gray-200 rounded-xl p-4">
-            <p className="text-xs text-gray-400 mb-2">Your invite link</p>
-            <p className="text-sm text-gray-900 font-mono break-all mb-3">{inviteLink}</p>
+          <div className="bg-muted rounded-xl p-4">
+            <p className="label-caps mb-2">your invite link</p>
+            <p className="font-mono text-sm text-foreground break-all mb-4">{inviteLink}</p>
             <div className="flex gap-2">
               <button
                 onClick={() => handleCopy(inviteLink!)}
-                className="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition-colors"
+                className="px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
               >
-                {copied ? 'Copied!' : 'Copy link'}
+                {copied ? 'copied!' : 'copy link'}
               </button>
               {canShare && (
                 <button
                   onClick={() => handleShare(inviteLink!)}
-                  className="px-4 py-2 border border-gray-200 text-sm font-medium text-gray-700 rounded-lg hover:border-gray-400 transition-colors"
+                  className="px-4 py-2 border border-border text-sm font-medium text-foreground rounded-lg hover:border-primary/50 transition-colors"
                 >
-                  Share
+                  share
                 </button>
               )}
             </div>
@@ -164,22 +164,22 @@ export default function InvitePage() {
 
           <div className="flex items-center gap-2">
             <div
-              className={`w-2 h-2 rounded-full ${
+              className={`w-2 h-2 rounded-full shrink-0 ${
                 pairing.status === 'accepted' || pairing.status === 'active'
-                  ? 'bg-green-500'
-                  : 'bg-yellow-400'
+                  ? 'bg-success'
+                  : 'bg-warning'
               }`}
             />
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-muted-foreground">
               {pairing.status === 'accepted' || pairing.status === 'active'
-                ? 'Partner has accepted — comparison coming soon'
-                : 'Waiting for your partner to accept'}
+                ? 'partner has accepted — comparison coming soon'
+                : 'waiting for your partner to accept'}
             </p>
           </div>
 
           <div className="pt-2">
-            <Link href="/profile" className="text-sm text-gray-400 hover:text-gray-900 transition-colors">
-              ← Back to profile
+            <Link href="/profile" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              ← back to profile
             </Link>
           </div>
         </div>

@@ -31,54 +31,55 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white px-4">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <div className="w-full max-w-sm">
-        <h1 className="text-2xl font-semibold text-gray-900 mb-1">Welcome back</h1>
-        <p className="text-sm text-gray-500 mb-8">Sign in to continue</p>
+        <p className="label-caps mb-6">Threshold</p>
+        <h1 className="heading text-3xl text-foreground mb-1">welcome back</h1>
+        <p className="text-sm text-muted-foreground mb-8">sign in to continue</p>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-muted-foreground mb-1">email</label>
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+              className="w-full px-4 py-2.5 rounded-lg border border-input bg-card text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-shadow"
               placeholder="you@example.com"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <label className="block text-sm font-medium text-muted-foreground mb-1">password</label>
             <input
               type="password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+              className="w-full px-4 py-2.5 rounded-lg border border-input bg-card text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-shadow"
               placeholder="••••••••"
             />
           </div>
 
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          {error && <p className="text-sm text-tension">{error}</p>}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50"
+            className="w-full py-2.5 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50"
           >
-            {loading ? 'Signing in...' : 'Sign in'}
+            {loading ? 'signing in...' : 'sign in'}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-gray-500">
-          Don&apos;t have an account?{' '}
+        <p className="mt-6 text-center text-sm text-muted-foreground">
+          don&apos;t have an account?{' '}
           <Link
             href={next !== '/quiz' ? `/auth/signup?next=${encodeURIComponent(next)}` : '/auth/signup'}
-            className="text-gray-900 font-medium hover:underline"
+            className="text-foreground font-medium hover:underline"
           >
-            Sign up
+            sign up
           </Link>
         </p>
       </div>
@@ -88,7 +89,7 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-white" />}>
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
       <LoginForm />
     </Suspense>
   )

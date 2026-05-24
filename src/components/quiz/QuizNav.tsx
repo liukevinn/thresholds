@@ -14,17 +14,17 @@ export default function QuizNav({ canGoBack, canGoNext, isLastScenario, onBack, 
       <button
         onClick={onBack}
         disabled={!canGoBack}
-        className="px-5 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors disabled:opacity-30 disabled:pointer-events-none"
+        className="px-5 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors disabled:opacity-30 disabled:pointer-events-none"
       >
-        Back
+        back
       </button>
 
       <button
         onClick={onNext}
         disabled={!canGoNext}
-        className="px-6 py-2.5 rounded-lg text-sm font-medium bg-gray-900 text-white hover:bg-gray-700 transition-colors disabled:opacity-30 disabled:pointer-events-none"
+        className="px-6 py-2.5 rounded-lg text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-30 disabled:pointer-events-none"
       >
-        {isLastScenario ? 'Complete Quiz' : 'Next'}
+        {isLastScenario ? 'complete quiz' : 'next'}
       </button>
     </div>
   )

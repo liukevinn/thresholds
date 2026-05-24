@@ -17,21 +17,21 @@ export default function RetakeButton() {
   if (confirming) {
     return (
       <div className="space-y-4">
-        <p className="text-sm text-amber-800 bg-amber-50 border border-amber-100 rounded-lg px-4 py-3 leading-relaxed">
-          This will replace your current profile. Any active comparison with a partner will be recalculated automatically once both of you have current profiles.
+        <p className="text-sm text-warning bg-warning/10 border border-warning/20 rounded-lg px-4 py-3 leading-relaxed">
+          this will replace your current profile. any active comparison with a partner will be recalculated automatically once both of you have current profiles.
         </p>
         <div className="flex gap-3">
           <button
             onClick={handleConfirm}
-            className="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition-colors"
+            className="px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Yes, retake the quiz
+            yes, retake the quiz
           </button>
           <button
             onClick={() => setConfirming(false)}
-            className="px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
+            className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
-            Cancel
+            cancel
           </button>
         </div>
       </div>
@@ -41,9 +41,9 @@ export default function RetakeButton() {
   return (
     <button
       onClick={() => setConfirming(true)}
-      className="px-4 py-2 border border-gray-200 text-sm font-medium text-gray-700 rounded-lg hover:border-gray-400 transition-colors"
+      className="px-4 py-2 border border-border text-sm font-medium text-foreground rounded-lg hover:border-primary/50 transition-colors"
     >
-      Retake quiz
+      retake quiz
     </button>
   )
 }

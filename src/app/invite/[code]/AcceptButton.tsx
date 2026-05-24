@@ -24,12 +24,12 @@ export default function AcceptButton({ inviteCode }: Props) {
 
     if (rpcError || data?.error) {
       const msg = data?.error === 'already_used'
-        ? 'This invite has already been accepted.'
+        ? 'this invite has already been accepted.'
         : data?.error === 'own_invite'
-        ? 'You cannot accept your own invite.'
+        ? 'you cannot accept your own invite.'
         : data?.error === 'expired'
-        ? 'This invite has expired.'
-        : 'Failed to accept invite. Please try again.'
+        ? 'this invite has expired.'
+        : 'failed to accept invite. please try again.'
       setError(msg)
       setLoading(false)
       return
@@ -41,13 +41,13 @@ export default function AcceptButton({ inviteCode }: Props) {
 
   return (
     <div>
-      {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
+      {error && <p className="text-sm text-tension mb-4">{error}</p>}
       <button
         onClick={handleAccept}
         disabled={loading}
-        className="w-full py-3 bg-gray-900 text-white text-sm font-medium rounded-xl hover:bg-gray-700 transition-colors disabled:opacity-50"
+        className="w-full py-3 bg-primary text-primary-foreground text-sm font-medium rounded-xl hover:bg-primary/90 transition-colors disabled:opacity-50"
       >
-        {loading ? 'Accepting...' : 'Accept invite'}
+        {loading ? 'accepting...' : 'accept invite'}
       </button>
     </div>
   )

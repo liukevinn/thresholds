@@ -3,14 +3,14 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import NotificationBanner from '@/components/shared/NotificationBanner'
+import { THRESHOLDS, THRESHOLD_GROUPS } from '@/lib/constants/thresholds'
+import ThresholdGroup from '@/components/profile/ThresholdGroup'
+import type { ThresholdProfile } from '@/types/quiz'
 
 export const metadata: Metadata = {
   title: 'Your Profile',
   description: 'Your Threshold profile — 15 dimensions of relationship dynamics.',
 }
-import { THRESHOLDS, THRESHOLD_GROUPS } from '@/lib/constants/thresholds'
-import ThresholdGroup from '@/components/profile/ThresholdGroup'
-import type { ThresholdProfile } from '@/types/quiz'
 
 export default async function ProfilePage() {
   const supabase = await createClient()
@@ -53,21 +53,24 @@ export default async function ProfilePage() {
 
   return (
     <main className="max-w-2xl mx-auto px-4 py-12">
+
+      {/* Header */}
       <div className="mb-10">
-        <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Threshold Profile</p>
-        <h1 className="text-2xl font-semibold text-gray-900 mb-1">
-          {profileRow?.display_name ?? 'Your Profile'}
+        <p className="label-caps mb-2">Threshold Profile</p>
+        <h1 className="heading text-3xl text-foreground mb-2">
+          {profileRow?.display_name ?? 'your profile'}
         </h1>
-        <p className="text-xs text-gray-400">Computed {computedDate}</p>
+        <p className="text-xs text-muted-foreground">computed {computedDate}</p>
       </div>
 
-      <div className="mb-8 flex flex-wrap items-center gap-3">
+      {/* CTAs */}
+      <div className="mb-10 flex flex-wrap items-center gap-3">
         {activePairing?.status === 'active' && (
           <Link
             href={`/compare/${activePairing.id}`}
-            className="inline-block px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition-colors"
+            className="inline-block px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
           >
-            View comparison →
+            view comparison →
           </Link>
         )}
         {activePairing?.status === 'accepted' && (
@@ -76,29 +79,30 @@ export default async function ProfilePage() {
         {activePairing?.status === 'pending' && (
           <Link
             href="/invite"
-            className="inline-flex items-center gap-2 px-4 py-2 border border-gray-100 rounded-xl text-sm text-gray-500 hover:border-gray-300 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 border border-border rounded-xl text-sm text-muted-foreground hover:border-primary/50 transition-colors"
           >
-            <div className="w-2 h-2 rounded-full bg-amber-400 shrink-0" />
-            Waiting for partner to accept — manage invite →
+            <div className="w-2 h-2 rounded-full bg-warning shrink-0" />
+            waiting for partner — manage invite →
           </Link>
         )}
         {!activePairing && (
           <Link
             href="/invite"
-            className="inline-block px-4 py-2 border border-gray-200 text-sm font-medium text-gray-700 rounded-lg hover:border-gray-400 transition-colors"
+            className="inline-block px-4 py-2 border border-border text-sm font-medium text-foreground rounded-lg hover:border-primary/50 transition-colors"
           >
-            Invite a partner →
+            invite a partner →
           </Link>
         )}
         <Link
           href="/settings"
-          className="text-sm text-gray-400 hover:text-gray-600 transition-colors ml-auto"
+          className="text-sm text-muted-foreground hover:text-foreground transition-colors ml-auto"
         >
-          Settings
+          settings
         </Link>
       </div>
 
-      <div className="space-y-10">
+      {/* Threshold groups */}
+      <div className="space-y-6">
         {THRESHOLD_GROUPS.map((group) => {
           const groupThresholds = THRESHOLDS.filter((t) => t.group === group)
           return (

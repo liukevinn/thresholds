@@ -1,7 +1,16 @@
 {
   "permissions": {
     "allow": [
-      "Bash(unzip -p /Users/kevinliu/Desktop/thresholds/Threshold_System_Design.docx word/document.xml)"
+      "Bash(unzip -p /Users/kevinliu/Desktop/thresholds/Threshold_System_Design.docx word/document.xml)",
+      "Bash(node -e \"const p = require\\('./package.json'\\); console.log\\(JSON.stringify\\({deps: p.dependencies, dev: p.devDependencies}, null, 2\\)\\)\")",
+      "Bash(npx shadcn@latest --version)",
+      "Bash(npx shadcn@latest info)",
+      "Bash(npx shadcn@latest init --help)",
+      "Bash(npx shadcn@latest *)",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(curl *)",
+      "Bash(npx next *)"
     ]
   }
 }

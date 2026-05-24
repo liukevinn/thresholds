@@ -20,13 +20,13 @@ export default function QuizProgress({ currentScenario }: QuizProgressProps) {
 
   return (
     <div className="w-full px-6 pt-6 pb-4">
-      <div className="flex items-center justify-between mb-2 text-sm text-gray-500">
-        <span className="font-medium text-gray-700">{batchLabel}</span>
-        <span>{currentScenario} / 30</span>
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-sm font-bold text-foreground">{batchLabel}</span>
+        <span className="font-mono text-xs text-muted-foreground tabular-nums">{currentScenario} / 30</span>
       </div>
-      <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
+      <div className="w-full h-3 bg-border rounded-full overflow-hidden">
         <div
-          className="h-full bg-gray-900 rounded-full transition-all duration-300"
+          className="h-full bg-primary rounded-full transition-all duration-300"
           style={{ width: `${percent}%` }}
         />
       </div>

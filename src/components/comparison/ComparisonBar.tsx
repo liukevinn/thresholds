@@ -1,3 +1,6 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import type { ThresholdMeta } from '@/lib/constants/thresholds'
 import type { Zone } from '@/types/comparison'
 
@@ -11,42 +14,91 @@ interface Props {
   delta: number
 }
 
-const zoneStyles: Record<Zone, { badge: string; barB: string }> = {
-  alignment: { badge: 'text-emerald-700 bg-emerald-50', barB: 'bg-emerald-500' },
-  awareness: { badge: 'text-amber-700 bg-amber-50', barB: 'bg-amber-400' },
-  tension:   { badge: 'text-red-700 bg-red-50',     barB: 'bg-red-500' },
+const zoneConfig: Record<Zone, { badge: string; gap: string; label: string }> = {
+  alignment: { badge: 'bg-success/15 text-success',  gap: 'bg-success/10',  label: 'alignment' },
+  awareness:  { badge: 'bg-warning/15 text-warning',  gap: 'bg-warning/10',  label: 'awareness'  },
+  tension:    { badge: 'bg-tension/15 text-tension',  gap: 'bg-tension/10',  label: 'tension'    },
 }
 
-export default function ComparisonBar({ meta, scoreA, scoreB, zone, nameA, nameB, delta }: Props) {
-  const styles = zoneStyles[zone]
-  const initial = (name: string) => name.charAt(0).toUpperCase()
+export default function ComparisonBar({ meta, scoreA, scoreB, zone, delta }: Props) {
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
+
+  const cfg = zoneConfig[zone]
+  const minPos = Math.min(scoreA, scoreB)
+  const maxPos = Math.max(scoreA, scoreB)
 
   return (
     <div className="py-3">
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-mono text-gray-400 w-7 shrink-0">{meta.abbr}</span>
-          <span className="text-sm font-medium text-gray-900">{meta.label}</span>
-        </div>
+      <div className="flex items-center justify-between mb-3">
+        <span className="text-sm font-medium text-foreground">{meta.label}</span>
         <div className="flex items-center gap-2 shrink-0 ml-4">
-          <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${styles.badge}`}>{zone}</span>
-          <span className="text-xs text-gray-400 tabular-nums w-8 text-right">Δ{Math.round(delta)}</span>
+          <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${cfg.badge}`}>{cfg.label}</span>
+          <span className="font-mono text-xs text-muted-foreground tabular-nums">Δ{Math.round(Math.abs(delta))}</span>
         </div>
       </div>
-      <div className="space-y-1.5">
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-medium text-gray-400 w-5 shrink-0 text-right">{initial(nameA)}</span>
-          <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-            <div className="h-full bg-gray-900 rounded-full" style={{ width: `${Math.round(scoreA)}%` }} />
-          </div>
-          <span className="text-xs text-gray-500 tabular-nums w-6 text-right">{Math.round(scoreA)}</span>
+
+      {/* Desktop: single-axis range visualization */}
+      <div className="hidden md:block">
+        <div className="relative h-7 rounded-full bg-border mx-2">
+          {/* Zone gap between min and max positions */}
+          <div
+            className={`absolute top-0 h-full rounded-full ${cfg.gap}`}
+            style={{
+              left: `${minPos}%`,
+              width: `${maxPos - minPos}%`,
+              opacity: mounted ? 1 : 0,
+              transition: 'opacity 0.5s ease-out',
+            }}
+          />
+          {/* User A dot — primary */}
+          <div
+            className="absolute w-8.5 h-8.5 rounded-full bg-primary border-2 border-card shadow-sm"
+            style={{
+              left: `${scoreA}%`,
+              top: '50%',
+              transform: 'translate(-50%, -50%)',
+              opacity: mounted ? 1 : 0,
+              transition: 'opacity 0.5s ease-out 0.1s',
+            }}
+          />
+          {/* User B dot — info */}
+          <div
+            className="absolute w-8.5 h-8.5 rounded-full bg-info border-2 border-card shadow-sm"
+            style={{
+              left: `${scoreB}%`,
+              top: '50%',
+              transform: 'translate(-50%, -50%)',
+              opacity: mounted ? 1 : 0,
+              transition: 'opacity 0.5s ease-out 0.2s',
+            }}
+          />
         </div>
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-medium text-gray-400 w-5 shrink-0 text-right">{initial(nameB)}</span>
-          <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-            <div className={`h-full rounded-full ${styles.barB}`} style={{ width: `${Math.round(scoreB)}%` }} />
-          </div>
-          <span className="text-xs text-gray-500 tabular-nums w-6 text-right">{Math.round(scoreB)}</span>
+        <div className="flex justify-between mt-2 text-xs text-muted-foreground/50 tabular-nums">
+          <span>0</span>
+          <span>100</span>
+        </div>
+      </div>
+
+      {/* Mobile: stacked bars */}
+      <div className="md:hidden space-y-2">
+        <div className="h-3 rounded-full bg-border overflow-hidden">
+          <div
+            className="h-full bg-primary rounded-full"
+            style={{
+              width: mounted ? `${Math.round(scoreA)}%` : '0%',
+              transition: 'width 0.7s ease-out',
+            }}
+          />
+        </div>
+        <div className="h-3 rounded-full bg-border overflow-hidden">
+          <div
+            className="h-full bg-info rounded-full"
+            style={{
+              width: mounted ? `${Math.round(scoreB)}%` : '0%',
+              transition: 'width 0.7s ease-out 0.1s',
+            }}
+          />
         </div>
       </div>
     </div>

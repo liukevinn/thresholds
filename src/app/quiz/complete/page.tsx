@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { CheckCircle2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useQuizStore } from '@/stores/quizStore'
 import type { ScenarioOption } from '@/types/quiz'
@@ -49,7 +50,7 @@ export default function QuizCompletePage() {
       .insert(rows)
 
     if (insertError) {
-      setError('Failed to save your responses. Please try again.')
+      setError('failed to save your responses. please try again.')
       setSubmitting(false)
       return
     }
@@ -59,7 +60,7 @@ export default function QuizCompletePage() {
     })
 
     if (fnError || fnData?.error) {
-      setError('Failed to compute your profile. Please try again.')
+      setError('failed to compute your profile. please try again.')
       setSubmitting(false)
       return
     }
@@ -74,29 +75,27 @@ export default function QuizCompletePage() {
     }
   }
 
-  if (answeredCount < 30 && !submitting) return <div className="min-h-screen bg-white" />
+  if (answeredCount < 30 && !submitting) return <div className="min-h-screen bg-background" />
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] text-center px-4">
-      <div className="max-w-md">
-        <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-6">
-          <span className="text-3xl">✓</span>
-        </div>
-        <h1 className="text-2xl font-semibold text-gray-900 mb-3">All 30 scenarios complete</h1>
-        <p className="text-gray-500 text-sm leading-relaxed mb-8">
-          Submit your responses to generate your threshold profile. This takes a few seconds.
+      <div className="max-w-md w-full">
+        <CheckCircle2 className="w-12 h-12 text-primary mx-auto mb-6" />
+        <h1 className="heading text-3xl text-foreground mb-3">all 30 done</h1>
+        <p className="text-sm text-muted-foreground leading-relaxed mb-8">
+          submit your responses to generate your threshold profile. this takes a few seconds.
         </p>
 
         {error && (
-          <p className="text-sm text-red-600 mb-4">{error}</p>
+          <p className="text-sm text-tension mb-4">{error}</p>
         )}
 
         <button
           onClick={handleSubmit}
           disabled={submitting}
-          className="w-full py-3 bg-gray-900 text-white text-sm font-medium rounded-xl hover:bg-gray-700 transition-colors disabled:opacity-50"
+          className="w-full py-3 bg-primary text-primary-foreground text-sm font-medium rounded-xl hover:bg-primary/90 transition-colors disabled:opacity-50"
         >
-          {submitting ? 'Calculating your profile...' : 'See My Results'}
+          {submitting ? 'calculating your profile...' : 'see my results'}
         </button>
       </div>
     </div>
