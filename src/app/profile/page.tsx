@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
+import NotificationBanner from '@/components/shared/NotificationBanner'
 
 export const metadata: Metadata = {
   title: 'Your Profile',
@@ -32,9 +33,10 @@ export default async function ProfilePage() {
       .single(),
     supabase
       .from('pairings')
-      .select('id')
+      .select('id, status')
       .or(`user_a_id.eq.${user.id},user_b_id.eq.${user.id}`)
-      .in('status', ['accepted', 'active'])
+      .in('status', ['pending', 'accepted', 'active'])
+      .order('created_at', { ascending: false })
       .limit(1)
       .maybeSingle(),
   ])
@@ -59,15 +61,28 @@ export default async function ProfilePage() {
         <p className="text-xs text-gray-400">Computed {computedDate}</p>
       </div>
 
-      <div className="mb-8 flex gap-3">
-        {activePairing ? (
+      <div className="mb-8 flex flex-wrap items-center gap-3">
+        {activePairing?.status === 'active' && (
           <Link
             href={`/compare/${activePairing.id}`}
             className="inline-block px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition-colors"
           >
             View comparison →
           </Link>
-        ) : (
+        )}
+        {activePairing?.status === 'accepted' && (
+          <NotificationBanner pairingId={activePairing.id} />
+        )}
+        {activePairing?.status === 'pending' && (
+          <Link
+            href="/invite"
+            className="inline-flex items-center gap-2 px-4 py-2 border border-gray-100 rounded-xl text-sm text-gray-500 hover:border-gray-300 transition-colors"
+          >
+            <div className="w-2 h-2 rounded-full bg-amber-400 shrink-0" />
+            Waiting for partner to accept — manage invite →
+          </Link>
+        )}
+        {!activePairing && (
           <Link
             href="/invite"
             className="inline-block px-4 py-2 border border-gray-200 text-sm font-medium text-gray-700 rounded-lg hover:border-gray-400 transition-colors"
@@ -75,6 +90,12 @@ export default async function ProfilePage() {
             Invite a partner →
           </Link>
         )}
+        <Link
+          href="/settings"
+          className="text-sm text-gray-400 hover:text-gray-600 transition-colors ml-auto"
+        >
+          Settings
+        </Link>
       </div>
 
       <div className="space-y-10">

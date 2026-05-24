@@ -50,7 +50,14 @@ export default async function ComparePage({ params }: Props) {
 
   let comparison: ComparisonResult | null = existingComparison as ComparisonResult | null
 
-  if (!comparison && thresholdA && thresholdB) {
+  // Recompute if either profile was updated after the last comparison (retake scenario)
+  const profilesNewerThanComparison =
+    existingComparison && thresholdA && thresholdB && (
+      new Date((thresholdA as { computed_at: string }).computed_at) > new Date(existingComparison.computed_at) ||
+      new Date((thresholdB as { computed_at: string }).computed_at) > new Date(existingComparison.computed_at)
+    )
+
+  if ((!comparison || profilesNewerThanComparison) && thresholdA && thresholdB) {
     const { data: fnData } = await supabase.functions.invoke('compute-comparison', {
       body: { pairing_id: pairingId },
     })

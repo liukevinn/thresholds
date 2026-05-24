@@ -19,7 +19,12 @@ export default function InvitePage() {
   const [pairing, setPairing] = useState<Pairing | null>(null)
   const [generating, setGenerating] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [canShare, setCanShare] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    setCanShare(typeof navigator !== 'undefined' && typeof navigator.share === 'function')
+  }, [])
 
   useEffect(() => {
     async function load() {
@@ -52,7 +57,7 @@ export default function InvitePage() {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
 
-    const inviteCode = crypto.randomUUID().replace(/-/g, '').slice(0, 12)
+    const inviteCode = crypto.randomUUID().replace(/-/g, '').slice(0, 8)
 
     const { data, error: insertError } = await supabase
       .from('pairings')
@@ -74,6 +79,14 @@ export default function InvitePage() {
     await navigator.clipboard.writeText(link)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+  }
+
+  async function handleShare(link: string) {
+    try {
+      await navigator.share({ title: 'Threshold', url: link })
+    } catch {
+      // User dismissed the share sheet — no action needed
+    }
   }
 
   if (loading) return (
@@ -103,9 +116,8 @@ export default function InvitePage() {
     )
   }
 
-  const inviteLink = pairing
-    ? `${typeof window !== 'undefined' ? window.location.origin : ''}/invite/${pairing.invite_code}`
-    : null
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? (typeof window !== 'undefined' ? window.location.origin : '')
+  const inviteLink = pairing ? `${appUrl}/invite/${pairing.invite_code}` : null
 
   return (
     <main className="max-w-2xl mx-auto px-4 py-12">
@@ -132,12 +144,22 @@ export default function InvitePage() {
           <div className="border border-gray-200 rounded-xl p-4">
             <p className="text-xs text-gray-400 mb-2">Your invite link</p>
             <p className="text-sm text-gray-900 font-mono break-all mb-3">{inviteLink}</p>
-            <button
-              onClick={() => handleCopy(inviteLink!)}
-              className="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition-colors"
-            >
-              {copied ? 'Copied!' : 'Copy link'}
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => handleCopy(inviteLink!)}
+                className="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                {copied ? 'Copied!' : 'Copy link'}
+              </button>
+              {canShare && (
+                <button
+                  onClick={() => handleShare(inviteLink!)}
+                  className="px-4 py-2 border border-gray-200 text-sm font-medium text-gray-700 rounded-lg hover:border-gray-400 transition-colors"
+                >
+                  Share
+                </button>
+              )}
+            </div>
           </div>
 
           <div className="flex items-center gap-2">
