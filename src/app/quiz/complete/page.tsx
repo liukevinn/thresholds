@@ -38,9 +38,15 @@ export default function QuizCompletePage() {
       selected_option: selectedOption as ScenarioOption,
     }))
 
+    await supabase
+      .from('quiz_responses')
+      .delete()
+      .eq('user_id', user.id)
+      .eq('response_version', 1)
+
     const { error: insertError } = await supabase
       .from('quiz_responses')
-      .upsert(rows, { onConflict: 'user_id,scenario_number,response_version' })
+      .insert(rows)
 
     if (insertError) {
       setError('Failed to save your responses. Please try again.')
@@ -59,10 +65,16 @@ export default function QuizCompletePage() {
     }
 
     reset()
-    router.push('/profile')
+    const pendingInvite = sessionStorage.getItem('pending_invite')
+    if (pendingInvite) {
+      sessionStorage.removeItem('pending_invite')
+      router.push(`/invite/${pendingInvite}`)
+    } else {
+      router.push('/profile')
+    }
   }
 
-  if (answeredCount < 30 && !submitting) return null
+  if (answeredCount < 30 && !submitting) return <div className="min-h-screen bg-white" />
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] text-center px-4">
