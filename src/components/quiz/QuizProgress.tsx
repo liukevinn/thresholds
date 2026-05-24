@@ -19,7 +19,7 @@ export default function QuizProgress({ currentScenario }: QuizProgressProps) {
   const batchLabel = getBatchLabel(currentScenario)
 
   return (
-    <div className="w-full px-6 pt-6 pb-4">
+    <div className="sticky top-0 z-10 bg-background w-full px-6 pt-6 pb-4">
       <div className="flex items-center justify-between mb-2">
         <span className="text-sm font-bold text-foreground">{batchLabel}</span>
         <span className="font-mono text-xs text-muted-foreground tabular-nums">{currentScenario} / 30</span>

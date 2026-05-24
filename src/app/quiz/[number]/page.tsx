@@ -55,7 +55,7 @@ export default function ScenarioPage() {
   }
 
   return (
-    <div className="py-6">
+    <div className="pt-6 pb-28">
       <ScenarioCard
         scenario={scenario}
         selectedOption={selectedOption}
