@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,8 +14,15 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Threshold — Relationship Dynamics Assessment",
+  title: {
+    default: "Threshold — Relationship Dynamics Assessment",
+    template: "%s — Threshold",
+  },
   description: "Understand why you and your partner interact the way you do.",
+  openGraph: {
+    siteName: "Threshold",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -27,7 +35,10 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }

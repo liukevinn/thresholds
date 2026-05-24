@@ -29,18 +29,24 @@ export async function updateSession(request: NextRequest) {
 
   const { pathname } = request.nextUrl
 
-  const protectedRoutes = ['/quiz', '/profile', '/invite', '/compare', '/settings']
-  const isProtected = protectedRoutes.some((route) => pathname.startsWith(route))
+  const protectedPrefixes = ['/quiz', '/profile', '/compare', '/settings']
+  const protectedExact = ['/invite']
+  const isProtected =
+    protectedExact.includes(pathname) ||
+    protectedPrefixes.some((route) => pathname.startsWith(route))
 
   if (!user && isProtected) {
     const url = request.nextUrl.clone()
     url.pathname = '/auth/login'
+    url.searchParams.set('next', pathname)
     return NextResponse.redirect(url)
   }
 
   if (user && (pathname === '/auth/login' || pathname === '/auth/signup')) {
+    const next = request.nextUrl.searchParams.get('next')
     const url = request.nextUrl.clone()
-    url.pathname = '/quiz'
+    url.pathname = next && next.startsWith('/') ? next : '/quiz'
+    url.search = ''
     return NextResponse.redirect(url)
   }
 

@@ -1,12 +1,14 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { Suspense, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 
-export default function SignupPage() {
+function SignupForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const next = searchParams.get('next') ?? '/quiz'
   const [displayName, setDisplayName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -31,7 +33,7 @@ export default function SignupPage() {
       setError(error.message)
       setLoading(false)
     } else {
-      router.push('/quiz')
+      router.push(next)
     }
   }
 
@@ -92,11 +94,22 @@ export default function SignupPage() {
 
         <p className="mt-6 text-center text-sm text-gray-500">
           Already have an account?{' '}
-          <Link href="/auth/login" className="text-gray-900 font-medium hover:underline">
+          <Link
+            href={next !== '/quiz' ? `/auth/login?next=${encodeURIComponent(next)}` : '/auth/login'}
+            className="text-gray-900 font-medium hover:underline"
+          >
             Sign in
           </Link>
         </p>
       </div>
     </div>
+  )
+}
+
+export default function SignupPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white" />}>
+      <SignupForm />
+    </Suspense>
   )
 }
