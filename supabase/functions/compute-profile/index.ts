@@ -436,6 +436,7 @@ serve(async (req) => {
         {
           user_id: requestedUserId,
           profile_version: responseVersion,
+          computed_at: new Date().toISOString(),
           ...scores,
         },
         { onConflict: 'user_id,profile_version' }
